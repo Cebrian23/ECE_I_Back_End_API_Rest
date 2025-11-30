@@ -25,7 +25,7 @@ import { Transform_Monument } from "./utilities/history/utils_monument.ts";
 import { Transform_Festivity } from "./utilities/festivity/utils_festivity.ts";
 import { FestivityDB } from "./types/festivity/Festivity.ts";
 import { Transform_Writer } from "./utilities/literature/utils_writer.ts";
-import { Limit_Century_Filter, Limit_Date_Filter } from "./utilities/history/utils_date.ts";
+import { Limit_Date_Filter } from "./utilities/history/utils_date.ts";
 
 const handler = async (req: Request): Promise<Response> => {
 	const method = req.method;
@@ -151,7 +151,7 @@ const handler = async (req: Request): Promise<Response> => {
         }
       );
     }
-    else if(path === "/events/start_date"){
+    else if(path === "/events/limit_start_date"){
       const year = searchParams.get("year");
       const ac_dc = searchParams.get("ac_dc");
 
@@ -163,16 +163,8 @@ const handler = async (req: Request): Promise<Response> => {
       const eve_selection: EventDB[] = [];
 
       events_db.forEach((event) => {
-        const date = event.start_date?.normal_date;
-        const date2 = event.start_date?.century_date;
-
-        if(date !== undefined ){
+        const date = event.start_date?.normal_date;if(date !== undefined ){
           if(Limit_Date_Filter(date, Number(year), ac_dc, "Start") === true){
-            eve_selection.push(event);
-          }
-        }
-        else if(date2 !== undefined){
-          if(Limit_Century_Filter(date2, year, ac_dc, "Start") === true){
             eve_selection.push(event);
           }
         }
@@ -189,7 +181,7 @@ const handler = async (req: Request): Promise<Response> => {
         }
       );
     }
-    /*else if(path === "/events/start_date"){
+    else if(path === "/events/start_date"){
       const year = searchParams.get("year");
       const ac_dc = searchParams.get("ac_dc");
 
@@ -217,8 +209,8 @@ const handler = async (req: Request): Promise<Response> => {
           status: 200,
         }
       );
-    }*/
-    else if(path === "/events/end_date"){
+    }
+    else if(path === "/events/limit_end_date"){
       const year = searchParams.get("year");
       const ac_dc = searchParams.get("ac_dc");
 
@@ -230,16 +222,8 @@ const handler = async (req: Request): Promise<Response> => {
       const eve_selection: EventDB[] = [];
 
       events_db.forEach((event) => {
-        const date = event.end_date?.normal_date;
-        const date2 = event.end_date?.century_date;
-
-        if(date !== undefined){
+        const date = event.end_date?.normal_date;if(date !== undefined){
           if(Limit_Date_Filter(date, Number(year), ac_dc, "End") === true){
-            eve_selection.push(event);
-          }
-        }
-        else if(date2 !== undefined){
-          if(Limit_Century_Filter(date2, year, ac_dc, "End") === true){
             eve_selection.push(event);
           }
         }
@@ -256,7 +240,7 @@ const handler = async (req: Request): Promise<Response> => {
         }
       );
     }
-    /*else if(path === "/events/end_date"){
+    else if(path === "/events/end_date"){
       const year = searchParams.get("year");
       const ac_dc = searchParams.get("ac_dc");
 
@@ -284,7 +268,7 @@ const handler = async (req: Request): Promise<Response> => {
           status: 200,
         }
       );
-    }*/
+    }
     else if(path === "/events/double_date"){
       const year_a = searchParams.get("year_a");
       const ac_dc_a = searchParams.get("ac_dc_1");
@@ -337,6 +321,58 @@ const handler = async (req: Request): Promise<Response> => {
         }
       );
     }
+    /*else if(path === "/events/limit_start_century"){
+      const century = searchParams.get("century");
+      const ac_dc = searchParams.get("ac_dc");
+
+      if(!century || !ac_dc){
+        throw new Error("");
+      }
+
+      //
+    }
+    else if(path === "/events/start_century"){
+      const century = searchParams.get("century");
+      const ac_dc = searchParams.get("ac_dc");
+
+      if(!century || !ac_dc){
+        throw new Error("");
+      }
+
+      //
+    }
+    else if(path === "/events/limit_end_century"){
+      const century = searchParams.get("century");
+      const ac_dc = searchParams.get("ac_dc");
+
+      if(!century || !ac_dc){
+        throw new Error("");
+      }
+
+      //
+    }
+    else if(path === "/events/end_century"){
+      const century = searchParams.get("century");
+      const ac_dc = searchParams.get("ac_dc");
+
+      if(!century || !ac_dc){
+        throw new Error("");
+      }
+
+      //
+    }
+    else if(path === "/events/doble_century"){
+      const century_a = searchParams.get("century_a");
+      const ac_dc_a = searchParams.get("ac_dc_1");
+      const century_b = searchParams.get("century_b");
+      const ac_dc_b = searchParams.get("ac_dc_2");
+
+      if(!century_a || !ac_dc_a || !century_b || !ac_dc_b){
+        throw new Error("");
+      }
+
+      //
+    }*/
     else if(path === "/heraldries"){
       const heraldries_db: HeraldryDB[] = await HeraldriesCollection.find().toArray();
 
@@ -505,7 +541,7 @@ const handler = async (req: Request): Promise<Response> => {
         }
       );
     }
-    else if(path === "/organizations/creation_date"){
+    else if(path === "/organizations/limit_creation_date"){
       const year = searchParams.get("year");
       const ac_dc = searchParams.get("ac_dc");
 
@@ -518,15 +554,8 @@ const handler = async (req: Request): Promise<Response> => {
 
       organizations_db.forEach((organization) => {
         const date = organization.creation?.normal_date;
-        const date2 = organization.creation?.century_date;
-
         if(date !== undefined){
           if(Limit_Date_Filter(date, Number(year), ac_dc, "Creation") === true){
-            org_selection.push(organization);
-          }
-        }
-        else if(date2 !== undefined){
-          if(Limit_Century_Filter(date2, year, ac_dc, "Creation") === true){
             org_selection.push(organization);
           }
         }
@@ -543,7 +572,7 @@ const handler = async (req: Request): Promise<Response> => {
         }
       );
     }
-    /*else if(path === "/organizations/creation_date"){
+    else if(path === "/organizations/creation_date"){
       const year = searchParams.get("year");
       const ac_dc = searchParams.get("ac_dc");
 
@@ -571,8 +600,8 @@ const handler = async (req: Request): Promise<Response> => {
           status: 200,
         }
       );
-    }*/
-    else if(path === "/organizations/dissolution_date"){
+    }
+    else if(path === "/organizations/limit_dissolution_date"){
       const year = searchParams.get("year");
       const ac_dc = searchParams.get("ac_dc");
 
@@ -585,15 +614,8 @@ const handler = async (req: Request): Promise<Response> => {
 
       organizations_db.forEach((organization) => {
         const date = organization.dissolution?.normal_date;
-        const date2 = organization.dissolution?.century_date;
-
         if(date !== undefined){
           if(Limit_Date_Filter(date, Number(year), ac_dc, "Dissolution")){
-            org_selection.push(organization);
-          }
-        }
-        else if(date2 !== undefined){
-          if(Limit_Century_Filter(date2, year, ac_dc, "Dissolution") === true){
             org_selection.push(organization);
           }
         }
@@ -610,7 +632,7 @@ const handler = async (req: Request): Promise<Response> => {
         }
       );
     }
-    /*else if(path === "/organizations/dissolution_date"){
+    else if(path === "/organizations/dissolution_date"){
       const year = searchParams.get("year");
       const ac_dc = searchParams.get("ac_dc");
 
@@ -638,7 +660,7 @@ const handler = async (req: Request): Promise<Response> => {
           status: 200,
         }
       );
-    }*/
+    }
     else if(path === "/organizations/double_date"){
       const year_a = searchParams.get("year_a");
       const ac_dc_a = searchParams.get("ac_dc_1");
@@ -691,6 +713,58 @@ const handler = async (req: Request): Promise<Response> => {
         }
       );
     }
+    /*else if(path === "/organizations/limit_start_century"){
+      const century = searchParams.get("century");
+      const ac_dc = searchParams.get("ac_dc");
+
+      if(!century || !ac_dc){
+        throw new Error("");
+      }
+
+      //
+    }
+    else if(path === "/organizations/start_century"){
+      const century = searchParams.get("century");
+      const ac_dc = searchParams.get("ac_dc");
+
+      if(!century || !ac_dc){
+        throw new Error("");
+      }
+
+      //
+    }
+    else if(path === "/organizations/limit_end_century"){
+      const century = searchParams.get("century");
+      const ac_dc = searchParams.get("ac_dc");
+
+      if(!century || !ac_dc){
+        throw new Error("");
+      }
+
+      //
+    }
+    else if(path === "/organizations/end_century"){
+      const century = searchParams.get("century");
+      const ac_dc = searchParams.get("ac_dc");
+
+      if(!century || !ac_dc){
+        throw new Error("");
+      }
+
+      //
+    }
+    else if(path === "/organizations/doble_century"){
+      const century_a = searchParams.get("century_a");
+      const ac_dc_a = searchParams.get("ac_dc_1");
+      const century_b = searchParams.get("century_b");
+      const ac_dc_b = searchParams.get("ac_dc_2");
+
+      if(!century_a || !ac_dc_a || !century_b || !ac_dc_b){
+        throw new Error("");
+      }
+
+      //
+    }*/
     else if(path === "/people"){
       const people_db: PersonDB[] = await PeopleCollection.find().toArray();
 
@@ -752,7 +826,7 @@ const handler = async (req: Request): Promise<Response> => {
         }
       );
     }
-    else if(path === "/people/birth_date"){
+    else if(path === "/people/limit_birth_date"){
       const year = searchParams.get("year");
       const ac_dc = searchParams.get("ac_dc");
 
@@ -765,15 +839,8 @@ const handler = async (req: Request): Promise<Response> => {
 
       people_db.forEach((person) => {
         const date = person.birth_date?.normal_date;
-        const date2 = person.birth_date?.century_date;
-
         if(date !== undefined){
           if(Limit_Date_Filter(date, Number(year), ac_dc, "Birth") === true){
-            peo_selection.push(person);
-          }
-        }
-        else if(date2 !== undefined){
-          if(Limit_Century_Filter(date2, year, ac_dc, "Birth") === true){
             peo_selection.push(person);
           }
         }
@@ -790,7 +857,7 @@ const handler = async (req: Request): Promise<Response> => {
         }
       );
     }
-    /*else if(path === "/people/birth_date"){
+    else if(path === "/people/birth_date"){
       const year = searchParams.get("year");
       const ac_dc = searchParams.get("ac_dc");
 
@@ -818,8 +885,8 @@ const handler = async (req: Request): Promise<Response> => {
           status: 200,
         }
       );
-    }*/
-    else if(path === "/people/death_date"){
+    }
+    else if(path === "/people/limit_death_date"){
       const year = searchParams.get("year");
       const ac_dc = searchParams.get("ac_dc");
 
@@ -832,15 +899,8 @@ const handler = async (req: Request): Promise<Response> => {
 
       people_db.forEach((person) => {
         const date = person.death_date?.normal_date;
-        const date2 = person.death_date?.century_date;
-
         if(date !== undefined){
           if(Limit_Date_Filter(date, Number(year), ac_dc, "Death")){
-            peo_selection.push(person);
-          }
-        }
-        else if(date2 !== undefined){
-          if(Limit_Century_Filter(date2, year, ac_dc, "Death") === true){
             peo_selection.push(person);
           }
         }
@@ -857,7 +917,7 @@ const handler = async (req: Request): Promise<Response> => {
         }
       );
     }
-    /*else if(path === "/people/death_date"){
+    else if(path === "/people/death_date"){
       const year = searchParams.get("year");
       const ac_dc = searchParams.get("ac_dc");
 
@@ -885,7 +945,7 @@ const handler = async (req: Request): Promise<Response> => {
           status: 200,
         }
       );
-    }*/
+    }
     else if(path === "/people/double_date"){
       const year_a = searchParams.get("year_a");
       const ac_dc_a= searchParams.get("ac_dc_1");
@@ -938,6 +998,58 @@ const handler = async (req: Request): Promise<Response> => {
         }
       );
     }
+    /*else if(path === "/people/limit_start_century"){
+      const century = searchParams.get("century");
+      const ac_dc = searchParams.get("ac_dc");
+
+      if(!century || !ac_dc){
+        throw new Error("");
+      }
+
+      //
+    }
+    else if(path === "/people/start_century"){
+      const century = searchParams.get("century");
+      const ac_dc = searchParams.get("ac_dc");
+
+      if(!century || !ac_dc){
+        throw new Error("");
+      }
+
+      //
+    }
+    else if(path === "/people/limit_end_century"){
+      const century = searchParams.get("century");
+      const ac_dc = searchParams.get("ac_dc");
+
+      if(!century || !ac_dc){
+        throw new Error("");
+      }
+
+      //
+    }
+    else if(path === "/people/end_century"){
+      const century = searchParams.get("century");
+      const ac_dc = searchParams.get("ac_dc");
+
+      if(!century || !ac_dc){
+        throw new Error("");
+      }
+
+      //
+    }
+    else if(path === "/people/doble_century"){
+      const century_a = searchParams.get("century_a");
+      const ac_dc_a = searchParams.get("ac_dc_1");
+      const century_b = searchParams.get("century_b");
+      const ac_dc_b = searchParams.get("ac_dc_2");
+
+      if(!century_a || !ac_dc_a || !century_b || !ac_dc_b){
+        throw new Error("");
+      }
+
+      //
+    }*/
     else if(path === "/writer/id"){
       const id = searchParams.get("id");
 
@@ -1009,7 +1121,33 @@ const handler = async (req: Request): Promise<Response> => {
         }
       );
     }
-    else if(path === "/books/min_date"){
+    else if(path === "/books/publish_date"){
+      const year = searchParams.get("year");
+
+      if(!year){
+        throw new Error("No se ha encontrado el año de publicación minimo");
+      }
+
+      const books_db: BookDB[] = await BooksCollection.find().toArray();
+      const book_selection: BookDB[] = [];
+
+      books_db.forEach((book) => {
+        if(book.year_of_publish! === Number(year)){
+          book_selection.push(book);
+        }
+      });
+
+      const books: Peticion_Book[] = await Promise.all(book_selection.map(async (book) => await Transform_Book(book, WritersCollection, SongsCollection,
+                                                                                                               AlbumsCollection, BandsCollection)));
+
+      return new Response(
+        JSON.stringify(books),
+        {
+          status: 200,
+        }
+      );
+    }
+    else if(path === "/books/limit_min_date"){
       const year = searchParams.get("year");
 
       if(!year){
@@ -1035,7 +1173,7 @@ const handler = async (req: Request): Promise<Response> => {
         }
       );
     }
-    else if(path === "/books/max_date"){
+    else if(path === "/books/limit_max_date"){
       const year = searchParams.get("year");
 
       if(!year){
