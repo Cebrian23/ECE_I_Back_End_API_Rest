@@ -860,6 +860,30 @@ const handler = async (req: Request): Promise<Response> => {
         }
       );
     }
+    else if(path === "/people/nickname"){
+      const nickname = searchParams.get("nickname")?.replace("%20", " ");
+
+      if(!nickname){
+        throw new Error("No se ha encontrado el nombre");
+      }
+
+      let people_db: PersonDB[] = [];
+      
+      if(nickname){
+        people_db = await PeopleCollection.find({nickname: nickname}).toArray();
+      }
+
+      const people = await Promise.all(people_db.map(async (person) => await Transform_Person(person, SongsCollection, AlbumsCollection,
+                                                                                              EventsCollection, OrganizationsCollection,
+                                                                                              BandsCollection)));
+      
+      return new Response(
+        JSON.stringify(people),
+        {
+          status: 200,
+        }
+      );
+    }
     else if(path === "/people/limit_birth_date"){
       const year = searchParams.get("year");
       const ac_dc = searchParams.get("ac_dc");
