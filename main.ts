@@ -25,7 +25,7 @@ import { Transform_Monument } from "./utilities/history/utils_monument.ts";
 import { Transform_Festivity } from "./utilities/festivity/utils_festivity.ts";
 import { FestivityDB } from "./types/festivity/Festivity.ts";
 import { Transform_Writer } from "./utilities/literature/utils_writer.ts";
-import { Limit_Century_Filter, Limit_Date_Filter } from "./utilities/history/utils_date.ts";
+import { Limit_Date_Filter } from "./utilities/history/utils_date.ts";
 
 const handler = async (req: Request): Promise<Response> => {
 	const method = req.method;
